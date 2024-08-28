@@ -16,7 +16,10 @@ import java.util.Scanner;
 
 public class AdopetConsoleApplication {
 
+
     public static void main(String[] args) {
+        AdopetConsoleApplication adopetConsoleApplication = new AdopetConsoleApplication();
+
         System.out.println("##### BOAS VINDAS AO SISTEMA ADOPET CONSOLE #####");
         try {
             int opcaoEscolhida = 0;
@@ -32,7 +35,7 @@ public class AdopetConsoleApplication {
                 opcaoEscolhida = Integer.parseInt(textoDigitado);
 
                 if (opcaoEscolhida == 1) {
-                    consultarAbrigo();
+                    adopetConsoleApplication.consultarAbrigo();
                 } else if (opcaoEscolhida == 2) {
                     cadastrarAbrigo();
                 } else if (opcaoEscolhida == 3) {
@@ -52,7 +55,7 @@ public class AdopetConsoleApplication {
         }
     }
 
-    private static void consultarAbrigo() throws IOException, InterruptedException {
+    private void consultarAbrigo() throws IOException, InterruptedException {
         String uri = "http://localhost:8080/abrigos";
         HttpResponse<String> response = dispararConsultaGet(uri);
         JsonArray jsonArray = JsonParser.parseString(response.body()).getAsJsonArray();
