@@ -61,8 +61,4 @@ public class Abrigo {
         this.pets = pets;
     }
 
-    @Override
-    public String toString() {
-        return this.getId() + " - " + this.getNome();
-    }
 }
