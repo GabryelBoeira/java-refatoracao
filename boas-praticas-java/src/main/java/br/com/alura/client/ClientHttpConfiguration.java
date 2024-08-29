@@ -1,5 +1,6 @@
 package br.com.alura.client;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -29,17 +30,17 @@ public class ClientHttpConfiguration {
     /**
      * Sends a POST request with the given JSON to the given URI and returns the response.
      * @param uri the URI to be queried
-     * @param json the JSON to be sent in the request
+     * @param object the JSON to be sent in the request
      * @return the response of the GET request
      * @throws IOException if an I/O error occurs
      * @throws InterruptedException if the operation is interrupted
      */
-    public HttpResponse<String> dispararConsultaPost(String uri, JsonObject json) throws IOException, InterruptedException {
+    public HttpResponse<String> dispararConsultaPost(String uri, Object object) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .header("Content-Type", "application/json")
-                .method("POST", HttpRequest.BodyPublishers.ofString(json.toString()))
+                .method("POST", HttpRequest.BodyPublishers.ofString(new Gson().toJson(object)))
                 .build();
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
