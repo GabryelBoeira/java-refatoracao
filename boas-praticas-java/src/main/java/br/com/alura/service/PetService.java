@@ -1,5 +1,6 @@
 package br.com.alura.service;
 
+import br.com.alura.client.ClientHttpConfiguration;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,20 +9,23 @@ import com.google.gson.JsonParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Scanner;
 
 public class PetService {
+
+    private final ClientHttpConfiguration clientHttp;
+
+    public PetService(ClientHttpConfiguration clientHttp) {
+        this.clientHttp = clientHttp;
+    }
 
     public void listarPetsAbrigo() throws IOException, InterruptedException {
         System.out.println("Digite o id ou nome do abrigo:");
         String idOuNome = new Scanner(System.in).nextLine();
 
         String uri = "http://localhost:8080/abrigos/" + idOuNome + "/pets";
-        HttpResponse<String> response = dispararConsultaGet(uri);
+        HttpResponse<String> response = clientHttp.dispararConsultaGet(uri);
 
         int statusCode = response.statusCode();
         if (statusCode == 404 || statusCode == 500) {
@@ -73,7 +77,7 @@ public class PetService {
             json.addProperty("peso", peso);
 
             String uri = "http://localhost:8080/abrigos/" + idOuNome + "/pets";
-            HttpResponse<String> response = dispararConsultaPost(uri, json);
+            HttpResponse<String> response = clientHttp.dispararConsultaPost(uri, json);
 
             int statusCode = response.statusCode();
             String responseBody = response.body();
@@ -91,22 +95,4 @@ public class PetService {
         reader.close();
     }
 
-    private HttpResponse<String> dispararConsultaGet(String uri) throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(uri))
-                .method("GET", HttpRequest.BodyPublishers.noBody())
-                .build();
-        return client.send(request, HttpResponse.BodyHandlers.ofString());
-    }
-
-    private HttpResponse<String> dispararConsultaPost(String uri, JsonObject json) throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(uri))
-                .header("Content-Type", "application/json")
-                .method("POST", HttpRequest.BodyPublishers.ofString(json.toString()))
-                .build();
-        return client.send(request, HttpResponse.BodyHandlers.ofString());
-    }
 }
