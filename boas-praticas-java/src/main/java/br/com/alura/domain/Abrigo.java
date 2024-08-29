@@ -1,7 +1,5 @@
 package br.com.alura.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.List;
 
 public class Abrigo {
