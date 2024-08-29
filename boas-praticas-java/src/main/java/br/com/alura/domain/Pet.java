@@ -77,4 +77,9 @@ public class Pet {
     public void setPeso(Float peso) {
         this.peso = peso;
     }
+
+    @Override
+    public String toString() {
+        return this.id + " - " + this.tipo + " - " + this.nome + " - " + this.raca + " - " + this.idade + " ano(s)";
+    }
 }
